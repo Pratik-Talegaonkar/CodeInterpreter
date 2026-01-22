@@ -20,7 +20,6 @@ A modern, dark-themed dashboard for exploring and understanding codebases with A
 
 1. Install dependencies:
    ```bash
-   cd frontend
    npm install
    ```
 
