@@ -7,5 +7,5 @@
 **/*.env.local
 **/.vscode
 **/.cache
-frontend/test-*.js
-frontend/list-models-raw.js
+test-*.js
+list-models-raw.js

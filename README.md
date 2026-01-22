@@ -1,66 +1,38 @@
-# CodeInterpreter
+# Code Explainer AI
 
-## Overview
+A modern, dark-themed dashboard for exploring and understanding codebases with AI.
 
-CodeInterpreter is a tool that explains source code line by line.
+## Features
 
-You give it a folder of code.  
-You get back explanations that stay aligned with the actual lines, respect the file structure, and do not pretend everything is obvious.
+- **Dark Mode UI**: Premium aesthetic with Zinc color palette.
+- **File Explorer**: Recursive file tree to navigate your project.
+- **Code Viewer**: Syntax-highlighted code display with line selection.
+- **AI Explanations**: Deep dive into code logic line-by-line.
 
-This project exists because most AI code explanation tools fall apart the moment you give them a real codebase instead of a short snippet.
+## Getting Started
 
----
+### Prerequisites
 
-## What CodeInterpreter Does
+- Node.js 18+
+- npm or pnpm
 
-- Takes a folder of source code (not just one file)
-- Walks the directory structure recursively
-- Detects the programming language per file
-- Breaks code into manageable chunks so token limits do not explode
-- Sends those chunks to a large language model using API keys
-- Produces:
-  - Line-by-line explanations
-  - File-level summaries
-  - Structured output that can be validated and rendered cleanly
+### Installation
 
-The output stays aligned with the original code.  
-Line numbers match. Formatting is preserved.
+1. Install dependencies:
+   ```bash
+   cd frontend
+   npm install
+   ```
 
----
+2. Run the development server:
+   ```bash
+   npm run dev
+   ```
 
-## What This Project Is Not
+3. Open [http://localhost:3000](http://localhost:3000) with your browser.
 
-- Not a chatbot wrapper
-- Not a copy-paste toy
-- Not AI magic
+## Project Structure
 
-If the model does not know something, the system is designed to say "unknown" instead of hallucinating.
-
----
-
-## Why This Exists
-
-I am learning AI engineering, and I wanted a project that forces me to deal with the hard parts:
-
-- Token budgeting
-- Chunking strategies
-- Prompt design that does not lie
-- API key security
-- Cost control
-- Handling large, messy inputs
-
-This project is deliberately more complicated than a tutorial because real systems are complicated.
-
----
-
-## Supported Languages
-
-- Python
-- Java
-- C / C++
-- JavaScript
-- HTML / CSS
-
-The architecture is language-agnostic and designed to be extended.
-
----
+- `src/app`: App router pages and layouts.
+- `src/components`: UI components (Explorer, CodeViewer, ExplanationPanel).
+- `src/lib`: Utilities and helpers.
