@@ -1,6 +1,3 @@
-#CodeInterpreter
-Overview
-
 CodeInterpreter is a tool that explains source code line by line.
 
 You give it a folder of code.
