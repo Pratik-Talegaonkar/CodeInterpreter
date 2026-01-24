@@ -1,9 +1,11 @@
 import { NextResponse } from 'next/server';
-import simpleGit from 'simple-git';
 import path from 'path';
-import fs from 'fs/promises';
+import fs from 'fs'; // isomorphic-git needs fs, not fs/promises usually for its fs plugin, but let's check docs
+import fsp from 'fs/promises';
 import { v4 as uuidv4 } from 'uuid';
 import os from 'os';
+import git from 'isomorphic-git';
+import http from 'isomorphic-git/http/node';
 
 export async function POST(request: Request) {
     try {
@@ -13,47 +15,44 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Repository URL is required' }, { status: 400 });
         }
 
-        // Basic validation of GitHub URL
         if (!repoUrl.includes('github.com')) {
             return NextResponse.json({ error: 'Only GitHub repositories are supported currently' }, { status: 400 });
         }
 
-        // Generate a session ID (or use consistent hash for same repo caching?)
-        // Improving caching: Use btoa of repoUrl to reuse same folder for same repo
-        // This leverages Vercel's potential warm lambda disk
-        // BUT, multiple users might race. 
-        // Let's use a hash of the URL.
+        // Generate session ID
         const repoHash = Buffer.from(repoUrl).toString('base64').replace(/[^a-zA-Z0-9]/g, '');
-        const sessionId = repoHash.substring(0, 12); // Shorten for readability
+        const sessionId = repoHash.substring(0, 12);
 
-        // Use OS temp dir (works on Vercel)
         const tmpDir = os.tmpdir();
         const projectPath = path.join(tmpDir, 'code-interpreter', sessionId);
 
         console.log(`[GitHub] Cloning ${repoUrl} to ${projectPath}`);
 
-        // Check if exists
+        // Check availability
         try {
-            await fs.access(projectPath);
+            await fsp.access(projectPath);
             console.log(`[GitHub] Repo already exists at ${projectPath}, returning cached.`);
-            // Optional: git pull? For simplicity, assume immutable for now or fast enough to re-clone if we nuked it.
-            // Actually, if it exists, use it.
             return NextResponse.json({
                 sessionId,
                 projectPath,
                 message: 'Repository loaded from cache'
             });
         } catch (e) {
-            // Does not exist, proceed to clone
+            // Clone needed
         }
 
-        // Ensure parent dir exists
-        await fs.mkdir(path.dirname(projectPath), { recursive: true });
+        await fsp.mkdir(projectPath, { recursive: true });
 
-        const git = simpleGit();
-
-        // Clone with depth 1 for speed
-        await git.clone(repoUrl, projectPath, ['--depth', '1']);
+        // Clone using isomorphic-git
+        await git.clone({
+            fs,
+            http,
+            dir: projectPath,
+            url: repoUrl,
+            depth: 1,
+            singleBranch: true,
+            // onProgress: (event) => console.log(event.phase)
+        });
 
         return NextResponse.json({
             sessionId,
