@@ -191,7 +191,7 @@ export function EmailPasswordForm({ mode }: EmailPasswordFormProps) {
                     <>By creating an account, you agree that AI outputs require verification.</>
                 )}
                 {mode === "login" && (
-                    <>Placeholder authentication - redirects to dashboard for demo purposes.</>
+                    <>Secure authentication via NextAuth.js</>
                 )}
             </p>
         </form>
