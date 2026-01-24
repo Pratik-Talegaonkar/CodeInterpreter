@@ -119,19 +119,51 @@ export function ExplanationPanel({ selectedLine, fileContent, fileLanguage, file
     }, [selectedLine, fileContent, fileLanguage]);
 
 
+    const [activeTab, setActiveTab] = useState<'line' | 'file'>('file');
+
+    // Switch to line tab when a line is selected
+    useEffect(() => {
+        if (selectedLine) setActiveTab('line');
+    }, [selectedLine]);
+
     return (
         <div className="h-full bg-secondary/30 border-l border-border flex flex-col">
-            <div className="p-4 border-b border-border bg-secondary/10">
-                <h2 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                    <Sparkles size={16} className="text-purple-500" />
-                    AI Insights
-                </h2>
+            <div className="border-b border-border bg-secondary/10">
+                <div className="flex">
+                    <button
+                        onClick={() => setActiveTab('line')}
+                        className={cn(
+                            "flex-1 py-3 text-xs font-semibold uppercase tracking-wider transition-colors border-b-2",
+                            activeTab === 'line'
+                                ? "border-primary text-primary bg-background/50"
+                                : "border-transparent text-muted-foreground hover:text-foreground hover:bg-background/30"
+                        )}
+                    >
+                        Line Detail
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('file')}
+                        className={cn(
+                            "flex-1 py-3 text-xs font-semibold uppercase tracking-wider transition-colors border-b-2",
+                            activeTab === 'file'
+                                ? "border-primary text-primary bg-background/50"
+                                : "border-transparent text-muted-foreground hover:text-foreground hover:bg-background/30"
+                        )}
+                    >
+                        File Overview
+                    </button>
+                </div>
             </div>
 
-            <div className="flex-1 overflow-auto p-4 space-y-6">
+            <div className="flex-1 overflow-auto p-4">
 
-                {/* Selected Line Section */}
-                <div className="space-y-4">
+                {/* Line Tab content */}
+                <div className={cn("space-y-4", activeTab === 'line' ? "block" : "hidden")}>
+                    <div className="text-sm font-semibold text-foreground flex items-center gap-2 mb-4">
+                        <Sparkles size={16} className="text-purple-500" />
+                        AI Line Analysis
+                    </div>
+
                     {selectedLine ? (
                         <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
                             <div className="text-xs text-muted-foreground mb-2 font-mono uppercase tracking-wider flex justify-between">
@@ -139,11 +171,12 @@ export function ExplanationPanel({ selectedLine, fileContent, fileLanguage, file
                                 {loadingLine && <Loader2 size={12} className="animate-spin" />}
                             </div>
 
-                            <div className="p-4 rounded-lg bg-primary/10 border border-primary/20 text-foreground/90 leading-relaxed shadow-sm relative overflow-hidden">
+                            <div className="p-4 rounded-lg bg-primary/10 border border-primary/20 text-foreground/90 leading-relaxed shadow-sm relative overflow-hidden text-sm">
                                 {loadingLine ? (
                                     <div className="flex flex-col gap-2">
                                         <div className="h-4 bg-primary/20 rounded w-3/4 animate-pulse"></div>
                                         <div className="h-4 bg-primary/20 rounded w-1/2 animate-pulse"></div>
+                                        <div className="h-4 bg-primary/20 rounded w-5/6 animate-pulse"></div>
                                     </div>
                                 ) : (
                                     lineExplanation
@@ -151,54 +184,82 @@ export function ExplanationPanel({ selectedLine, fileContent, fileLanguage, file
                             </div>
                         </div>
                     ) : (
-                        <div className="p-4 rounded-lg bg-secondary/40 border border-border/50 text-muted-foreground text-sm text-center italic">
-                            Select a line of code to see a specific explanation.
+                        <div className="p-8 rounded-lg border border-dashed border-border flex flex-col items-center justify-center text-center gap-2 text-muted-foreground">
+                            <Sparkles size={24} className="opacity-20" />
+                            <p className="text-sm">Select a line of code to see a specific explanation.</p>
+                            <button
+                                onClick={() => setActiveTab('file')}
+                                className="text-xs text-primary hover:underline mt-2"
+                            >
+                                View File Summary
+                            </button>
                         </div>
                     )}
                 </div>
 
-                {/* File Context / Summary Section */}
-                <div className="pt-6 border-t border-border">
-                    <h3 className="text-xs font-semibold text-muted-foreground uppercase mb-3 flex items-center gap-2">
-                        <Info size={14} /> File Summary
-                    </h3>
+                {/* File Tab content */}
+                <div className={cn("space-y-6", activeTab === 'file' ? "block" : "hidden")}>
+                    <div className="text-sm font-semibold text-foreground flex items-center gap-2">
+                        <Info size={16} className="text-blue-500" />
+                        Project Context & Summary
+                    </div>
 
                     {loadingContext ? (
-                        <div className="space-y-2">
-                            <div className="h-3 bg-secondary rounded w-full animate-pulse"></div>
-                            <div className="h-3 bg-secondary rounded w-5/6 animate-pulse"></div>
-                            <div className="h-3 bg-secondary rounded w-4/6 animate-pulse"></div>
+                        <div className="space-y-4 p-4 rounded-lg border border-border/50 bg-background/50">
+                            <div className="h-4 bg-secondary rounded w-1/3 animate-pulse"></div>
+                            <div className="space-y-2">
+                                <div className="h-3 bg-secondary rounded w-full animate-pulse"></div>
+                                <div className="h-3 bg-secondary rounded w-full animate-pulse"></div>
+                                <div className="h-3 bg-secondary rounded w-5/6 animate-pulse"></div>
+                            </div>
                         </div>
                     ) : context ? (
-                        <div className="animate-in fade-in duration-500">
-                            <div className="text-sm text-foreground/80 leading-relaxed mb-4">
-                                {context.summary}
+                        <div className="animate-in fade-in duration-500 space-y-6">
+
+                            {/* Summary Card */}
+                            <div className="p-4 rounded-lg bg-secondary/20 border border-border">
+                                <h4 className="text-xs font-bold text-foreground uppercase tracking-wider mb-2 opacity-70">Analysis</h4>
+                                <div className="text-sm text-foreground/90 leading-relaxed">
+                                    {context.summary}
+                                </div>
                             </div>
 
+                            {/* Key Features */}
                             {context.key_features && (
-                                <div className="space-y-2 mb-4">
-                                    <span className="text-xs font-bold text-muted-foreground">Key Features:</span>
-                                    <ul className="list-disc list-inside text-xs text-muted-foreground ml-1">
-                                        {context.key_features.map((f, i) => <li key={i}>{f}</li>)}
-                                    </ul>
+                                <div className="space-y-2">
+                                    <h4 className="text-xs font-bold text-foreground uppercase tracking-wider opacity-70 flex items-center gap-2">
+                                        <Lightbulb size={12} /> Key Features
+                                    </h4>
+                                    <div className="rounded-lg border border-border/50 overflow-hidden">
+                                        {context.key_features.map((f, i) => (
+                                            <div key={i} className="px-3 py-2 text-xs border-b border-border/50 last:border-0 bg-background/50 flex gap-2">
+                                                <span className="text-primary">•</span> {f}
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             )}
 
-                            {context.complexity && (
-                                <div className="flex gap-2 text-xs text-muted-foreground bg-secondary/20 p-2 rounded border border-border/50">
-                                    <AlertTriangle size={14} className="text-amber-500 shrink-0 mt-0.5" />
-                                    <span>Complexity: {context.complexity}</span>
-                                </div>
-                            )}
+                            {/* Complexity & Notes */}
+                            <div className="grid grid-cols-1 gap-2">
+                                {context.complexity && (
+                                    <div className="flex gap-2 text-xs text-muted-foreground bg-amber-500/10 p-3 rounded border border-amber-500/20 items-center">
+                                        <AlertTriangle size={14} className="text-amber-500 shrink-0" />
+                                        <span className="font-medium text-amber-600 dark:text-amber-400">Complexity: {context.complexity}</span>
+                                    </div>
+                                )}
 
-                            {context.notes && context.notes.map((note, idx) => (
-                                <div key={idx} className="mt-2 text-xs text-muted-foreground bg-secondary/20 p-2 rounded">
-                                    <span>{note}</span>
-                                </div>
-                            ))}
+                                {context.notes && context.notes.map((note, idx) => (
+                                    <div key={idx} className="text-xs text-muted-foreground bg-blue-500/10 p-3 rounded border border-blue-500/20">
+                                        {note}
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     ) : (
-                        <div className="text-xs text-muted-foreground">No context available.</div>
+                        <div className="p-8 text-center text-xs text-muted-foreground bg-secondary/10 rounded-lg border border-dashed border-border">
+                            No file loaded. Select a file to view its summary.
+                        </div>
                     )}
                 </div>
             </div>
@@ -206,14 +267,17 @@ export function ExplanationPanel({ selectedLine, fileContent, fileLanguage, file
             {/* Meta / Usage Status */}
             {context?.meta && (
                 <div className="p-2 border-t border-border bg-secondary/10 text-[10px] text-muted-foreground flex justify-between items-center bg-card/50 backdrop-blur-sm">
-                    <span>
+                    <span title="Estimated AI Cost">
                         Est. Cost: ${Number(context.meta.cost).toFixed(6)}
                     </span>
-                    {context.isCached && (
-                        <span className="bg-green-500/10 text-green-500 px-1.5 py-0.5 rounded uppercase tracking-wider font-semibold text-[9px] border border-green-500/20">
-                            Cached
-                        </span>
-                    )}
+                    <div className="flex gap-2">
+                        <span>{context.meta.tokens} tokens</span>
+                        {context.isCached && (
+                            <span className="bg-green-500/10 text-green-500 px-1.5 py-0.5 rounded uppercase tracking-wider font-semibold text-[9px] border border-green-500/20">
+                                Cached
+                            </span>
+                        )}
+                    </div>
                 </div>
             )}
         </div>
