@@ -25,9 +25,11 @@ interface ExplanationPanelProps {
     selectedLine?: number | null;
     fileContent?: string;
     fileLanguage?: string;
+    filePath?: string;
+    projectRoot?: string;
 }
 
-export function ExplanationPanel({ selectedLine, fileContent, fileLanguage }: ExplanationPanelProps) {
+export function ExplanationPanel({ selectedLine, fileContent, fileLanguage, filePath, projectRoot }: ExplanationPanelProps) {
     const [context, setContext] = useState<FileContext | null>(null);
     const [lineExplanation, setLineExplanation] = useState<string | null>(null);
     const [loadingContext, setLoadingContext] = useState(false);
@@ -44,7 +46,9 @@ export function ExplanationPanel({ selectedLine, fileContent, fileLanguage }: Ex
                     method: 'POST',
                     body: JSON.stringify({
                         code: fileContent,
-                        language: fileLanguage
+                        language: fileLanguage,
+                        file_path: filePath,
+                        project_root: projectRoot
                     })
                 });
                 const data = await res.json();
@@ -85,7 +89,9 @@ export function ExplanationPanel({ selectedLine, fileContent, fileLanguage }: Ex
                         code: fileContent,
                         language: fileLanguage,
                         line_number: selectedLine,
-                        context_lines: { target: targetLine, before, after }
+                        context_lines: { target: targetLine, before, after },
+                        file_path: filePath,
+                        project_root: projectRoot
                     })
                 });
                 const data = await res.json();

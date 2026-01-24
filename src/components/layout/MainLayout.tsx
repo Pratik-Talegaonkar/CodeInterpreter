@@ -12,12 +12,22 @@ export function MainLayout() {
     const [fileContent, setFileContent] = useState<string>("// Select a file to view code");
     const [fileLanguage, setFileLanguage] = useState<string>("plaintext");
     const [selectedLine, setSelectedLine] = useState<number | null>(null);
+    const [filePath, setFilePath] = useState<string | undefined>();
+    const [projectRoot, setProjectRoot] = useState<string | undefined>();
 
     const handleFileSelect = async (file: FileNode) => {
         setSelectedFileId(file.id);
         setSelectedLine(null);
         setFileContent("// Loading...");
         setFileLanguage(file.language || "plaintext");
+        setFilePath(file.path);
+
+        // Extract project root from file path (path to the first parent directory)
+        // For example: e:\Coding\CodeInterpreter\test-project\main.ts -> e:\Coding\CodeInterpreter\test-project
+        const pathParts = file.path.split(/[\\/]/);
+        // Find the directory containing the file
+        const rootPath = pathParts.slice(0, -1).join('\\');
+        setProjectRoot(rootPath);
 
         try {
             const res = await fetch('/api/content', {
@@ -73,6 +83,8 @@ export function MainLayout() {
                         selectedLine={selectedLine}
                         fileContent={fileContent}
                         fileLanguage={fileLanguage}
+                        filePath={filePath}
+                        projectRoot={projectRoot}
                     />
                 </aside>
             </main>

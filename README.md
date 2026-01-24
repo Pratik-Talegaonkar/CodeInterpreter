@@ -1,38 +1,99 @@
-# Code Explainer AI
+# CodeInterpreter
 
-A modern, dark-themed dashboard for exploring and understanding codebases with AI.
+**AI-assisted code comprehension for real-world codebases.**
+
+CodeInterpreter is a modern, privacy-focused tool designed to help developers, students, and engineers understand complex codebases. It combines AST-based parsing with semantic search (RAG) to provide context-aware explanations of files, functions, and cross-file dependencies.
+
+![Project Status](https://img.shields.io/badge/Status-In_Development-yellow)
+![License](https://img.shields.io/badge/License-MIT-blue)
 
 ## Features
 
-- **Dark Mode UI**: Premium aesthetic with Zinc color palette.
-- **File Explorer**: Recursive file tree to navigate your project.
-- **Code Viewer**: Syntax-highlighted code display with line selection.
-- **AI Explanations**: Deep dive into code logic line-by-line.
+### 🔍 Deep Code Analysis
+- **Folder-Level Ingestion**: Scans entire project directories recursively.
+- **Dependency Graphs**: Maps imports, exports, and symbol definitions across files.
+- **AST Parsing**: Uses `java-parser`, `@typescript-eslint/typescript-estree`, and more for accurate symbol resolution.
+
+### 🧠 AI-Powered Insights
+- **Semantic Search**: Uses Google's `text-embedding-004` to find semantically relevant code chunks.
+- **Context-Aware Explanations**: Generates line-by-line explanations using Gemini Flash, injected with cross-file context.
+- **Confidence Scoring**: Heuristic-based scoring to filter relevant search results.
+
+### 🛡️ Production-Ready Architecture
+- **Authentication**: Secure login/signup via NextAuth.js (Email/Password + Google OAuth).
+- **Security**: Route protection middleware, bcrypt password hashing, and secure session handling.
+- **Modern Stack**: Next.js 14 (App Router), React, TailwindCSS, Prisma, and SQLite/PostgreSQL.
+
+## Tech Stack
+
+- **Frontend**: Next.js 14, React, TailwindCSS, Lucide Icons
+- **Auth**: NextAuth.js v4, Prisma Adapter, Bcryptjs
+- **Database**: SQLite (Local Dev) / PostgreSQL (Production)
+- **AI**: Google Gemini API (Embeddings + Chat)
+- **Analysis**: AST parsers for TS/JS, Java, Python
 
 ## Getting Started
 
-### Prerequisites
+See [SETUP_GUIDE.md](./SETUP_GUIDE.md) for detailed installation and configuration instructions.
 
-- Node.js 18+
-- npm or pnpm
+### Quick Start
 
-### Installation
-
-1. Install dependencies:
+1. **Clone the repository**
    ```bash
-   cd frontend
+   git clone https://github.com/Pratik-Talegaonkar/CodeInterpreter.git
+   cd CodeInterpreter
+   ```
+
+2. **Install dependencies**
+   ```bash
    npm install
    ```
 
-2. Run the development server:
+3. **Set up environment variables**
+   Copy `.env.local.example` to `.env.local` and add your keys.
+   ```bash
+   cp .env.local.example .env.local
+   ```
+
+4. **Initialize Database**
+   ```bash
+   npm run prisma:migrate
+   ```
+
+5. **Run the development server**
    ```bash
    npm run dev
    ```
 
-3. Open [http://localhost:3000](http://localhost:3000) with your browser.
+   Open [http://localhost:3000](http://localhost:3000) (or the port shown in terminal).
 
-## Project Structure
+## Authentication
 
-- `src/app`: App router pages and layouts.
-- `src/components`: UI components (Explorer, CodeViewer, ExplanationPanel).
-- `src/lib`: Utilities and helpers.
+The project uses NextAuth.js for authentication. 
+
+- **Local Development**: Uses SQLite (`dev.db`).
+- **Production**: Recommended to use Vercel Postgres or Supabase.
+- **Providers**: 
+  - Email/Password (Credentials)
+  - Google OAuth (optional, requires configuration)
+
+## Deployment
+
+This project is optimized for deployment on [Vercel](https://vercel.com).
+
+1. Push your code to a Git repository.
+2. Import the project in Vercel.
+3. Add the environment variables from `.env.local` to Vercel settings.
+4. **Crucial**: Update `DATABASE_URL` to point to a production PostgreSQL database.
+5. Deploy!
+
+## Disclaimer
+
+This is a learning-focused engineering project. AI-generated explanations are probabilistic and should be verified. The tool is designed to assist human understanding, not replace it.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+---
+Built by Pratik Talegaonkar.

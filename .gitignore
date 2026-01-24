@@ -9,3 +9,5 @@
 **/.cache
 test-*.js
 list-models-raw.js
+prisma/*.db
+prisma/*.db-journal
