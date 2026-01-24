@@ -32,9 +32,8 @@ CodeInterpreter is a modern, privacy-focused tool designed to help developers, s
 - **Analysis**: AST parsers for TS/JS, Java, Python
 
 **Important Note on Deployment**:
-When deployed to Vercel (or any cloud), the application **cannot access files on your local computer** (e.g., `C:\Users\...`).
-- **To analyze local files**: You must run the app locally (`npm run dev`).
-- **On Vercel**: You can only analyze files that are present in the cloud environment (e.g., the project's own source code via `./`).
+- **On Vercel**: Use the "GitHub" tab in the Explorer to analyze public repositories. The cloud server will clone them for you.
+- **Local Dev**: Use "Local" tab to access your computer's files.
 
 ## Getting Started
 
