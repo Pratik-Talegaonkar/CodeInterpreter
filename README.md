@@ -31,6 +31,11 @@ CodeInterpreter is a modern, privacy-focused tool designed to help developers, s
 - **AI**: Google Gemini API (Embeddings + Chat)
 - **Analysis**: AST parsers for TS/JS, Java, Python
 
+**Important Note on Deployment**:
+When deployed to Vercel (or any cloud), the application **cannot access files on your local computer** (e.g., `C:\Users\...`).
+- **To analyze local files**: You must run the app locally (`npm run dev`).
+- **On Vercel**: You can only analyze files that are present in the cloud environment (e.g., the project's own source code via `./`).
+
 ## Getting Started
 
 See [SETUP_GUIDE.md](./SETUP_GUIDE.md) for detailed installation and configuration instructions.
