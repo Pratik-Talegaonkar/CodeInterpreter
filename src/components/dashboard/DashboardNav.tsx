@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { UserDropdown } from "./UserDropdown";
+// import { UserDropdown } from "./UserDropdown";
 
 export function DashboardNav() {
     return (
@@ -32,7 +32,12 @@ export function DashboardNav() {
 
                 {/* Right side */}
                 <div className="ml-auto flex items-center gap-4">
-                    <UserDropdown />
+                    <Link
+                        href="/"
+                        className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                        Home
+                    </Link>
                 </div>
             </div>
         </nav>

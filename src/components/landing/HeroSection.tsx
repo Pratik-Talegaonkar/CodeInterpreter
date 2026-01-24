@@ -27,10 +27,10 @@ export function HeroSection() {
                 {/* CTAs */}
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
                     <Link
-                        href="/auth"
+                        href="/app"
                         className="group inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
                     >
-                        Get Started
+                        Start Analysis
                         <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                     </Link>
 

@@ -19,10 +19,9 @@ CodeInterpreter is a modern, privacy-focused tool designed to help developers, s
 - **Context-Aware Explanations**: Generates line-by-line explanations using Gemini Flash, injected with cross-file context.
 - **Confidence Scoring**: Heuristic-based scoring to filter relevant search results.
 
-### 🛡️ Production-Ready Architecture
-- **Authentication**: Secure login/signup via NextAuth.js (Email/Password + Google OAuth).
-- **Security**: Route protection middleware, bcrypt password hashing, and secure session handling.
-- **Modern Stack**: Next.js 14 (App Router), React, TailwindCSS, Prisma, and SQLite/PostgreSQL.
+### 🛡️ Deployment Ready
+- **Public Access**: Simplified for immediate deployment without forced authentication.
+- **Modern Stack**: Next.js 14 (App Router), React, TailwindCSS, Prisma.
 
 ## Tech Stack
 

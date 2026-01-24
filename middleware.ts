@@ -1,5 +1,7 @@
-export { default } from 'next-auth/middleware';
+export default function middleware() {
+    // No-op for public access
+}
 
 export const config = {
-    matcher: ['/dashboard/:path*', '/app/:path*'],
+    matcher: [],
 };
